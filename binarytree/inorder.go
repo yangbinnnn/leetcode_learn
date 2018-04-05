@@ -2,8 +2,7 @@ package main
 
 import "fmt"
 
-// Given a binary tree, return the preorder traversal of its nodes' values.
-//
+// Given a binary tree, return the inorder traversal of its nodes' values.
 // For example:
 // Given binary tree [1,null,2,3],
 //    1
@@ -11,9 +10,8 @@ import "fmt"
 //      2
 //     /
 //    3
-// return [1,2,3].
+// return [1,3,2].
 //
-
 /**
  * Definition for a binary tree node.
  * type TreeNode struct {
@@ -23,8 +21,8 @@ import "fmt"
  * }
  */
 
-// root -> left -> right
-func preorderTraversal(root *TreeNode) []int {
+// left -> root -> right
+func inorderTraversal(root *TreeNode) []int {
 	return recursive(root)
 }
 
@@ -33,12 +31,12 @@ func recursive(root *TreeNode) []int {
 	if root == nil {
 		return vals
 	}
-	// root fisrt
-	vals = append(vals, root.Val)
 	// left secord
 	if root.Left != nil {
 		vals = append(vals, recursive(root.Left)...)
 	}
+	// root fisrt
+	vals = append(vals, root.Val)
 	// right third
 	if root.Right != nil {
 		vals = append(vals, recursive(root.Right)...)
@@ -84,12 +82,15 @@ func iteratively(root *TreeNode) []int {
 	vals := []int{}
 	pt := root
 	for pt != nil || stack.Len() != 0 {
+		// to last left
 		for pt != nil {
-			vals = append(vals, pt.Val)
 			stack.Push(pt)
 			pt = pt.Left
 		}
 		pt = stack.Pop().(*TreeNode)
+		// root
+		vals = append(vals, pt.Val)
+		// to right
 		pt = pt.Right
 	}
 	return vals
